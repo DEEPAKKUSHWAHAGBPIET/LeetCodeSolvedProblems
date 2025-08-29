@@ -1,4 +1,4 @@
-#define MAX_LEVEL 100
+#define MAX_LEVEL 16
 #define P_FACTOR 0.5
 
 typedef struct SkipListNode{
@@ -35,6 +35,7 @@ int generateRandomLevel(){
     return level;
 }
 Skiplist* skiplistCreate() {
+    srand(time(NULL));
     Skiplist *list = (Skiplist *)malloc(sizeof(Skiplist));
     if(list==NULL) return NULL;
 
@@ -61,20 +62,6 @@ bool skiplistSearch(Skiplist* obj, int target) {
     return false;
 }
 
-void display(Skiplist *list){
-     printf("\n------------skip List--------------\n");
-     for(int i=list->level; i>=0; i--){
-          SkipListNode *curr = list->header->farword[i];
-          printf("Level:%d\n", i);
-          while(curr){
-               printf("%d ", curr->key);
-               curr = curr->farword[i];
-          }
-          printf("\n");
-     }
-     printf("\n");
-}
-
 void skiplistAdd(Skiplist* obj, int num) {
     SkipListNode *updates[MAX_LEVEL+1];
     SkipListNode *curr = obj->header;
@@ -89,10 +76,10 @@ void skiplistAdd(Skiplist* obj, int num) {
     }
 
     curr = curr->farword[0];
-    if(curr && curr->key==num)
-    {
-        return;
-    }
+    // if(curr && curr->key==num)
+    // {
+    //     return;
+    // }
 
     int newLevel = generateRandomLevel();
 
@@ -112,7 +99,7 @@ void skiplistAdd(Skiplist* obj, int num) {
         newNode->farword[i] = updates[i]->farword[i];
         updates[i]->farword[i] = newNode;
     }
-    display(obj);
+    
 }
 
 bool skiplistErase(Skiplist* obj, int num) {
